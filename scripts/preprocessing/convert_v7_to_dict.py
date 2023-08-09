@@ -35,7 +35,7 @@ for i in range(len(file_names)):
             ]
         )
     except ValueError:
-        print("selectVerifiedAnatomy is a list of  strings for EC155")
+        print(f"selectVerifiedAnatomy is a list of  strings for {os.path.basename(fn)}")
         print(data_dict["selectVerifiedAnatomy"])
 
     print(os.path.basename(fn).split(".")[0])
