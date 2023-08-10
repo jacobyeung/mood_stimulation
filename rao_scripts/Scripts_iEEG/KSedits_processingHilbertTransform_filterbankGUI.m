@@ -81,7 +81,7 @@ filteredData.envData = NaN(size(ecog,1),T,npbs);
 
 for iChan = 1:size(ecog,1)
     adat = fft(ecog(iChan,:),T);
-    for f = 1:npbs
+    for f = 1:npbs %loop through each frequency band
         H = zeros(1,T);
         k = freqs-cfs(f);
         H(1:nfreqs) = exp((-0.5).*((k./sds(f)).^2));
