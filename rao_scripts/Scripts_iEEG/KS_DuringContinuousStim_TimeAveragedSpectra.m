@@ -18,6 +18,7 @@ load([stimFilePathECOG stimFileName])
 
 patientID = stimFileName(1:5);
 
+% Goes channel by channel, not at all at once
 for iChan = 1:numVerifiedChans
     display(['Hilbert Stim Data: Chan ' num2str(iChan) ' of ' num2str(numVerifiedChans)])
     clear tempHilbertFilter
@@ -35,20 +36,20 @@ stimEndSample = floor((plotStimEnd/Fs)*dsFs);
 beforeStim = power_stim(:,:,1:stimStartSample - 1);
 
 % Average across time
-meanBeforeStim = squeeze(nanmean(beforeStim,3));
+meanBeforeStim = squeeze(mean(beforeStim,3));
 %% During Stim
 duringStim = power_stim(:,:,stimStartSample:stimEndSample);
 
 % Average across time
-meanDuringStim = squeeze(nanmean(duringStim,3));
+meanDuringStim = squeeze(mean(duringStim,3));
 %% After Stim
 afterStim = power_stim(:,:,stimEndSample + 1:end);
 
 % Average across time
-meanAfterStim = squeeze(nanmean(afterStim,3));
+meanAfterStim = squeeze(mean(afterStim,3));
 
 %%
-saveFileName = [stimFilePathECOG patientID '_TimeAveragedSpectraPower_' currentStim '.mat'];
-save(saveFileName,'meanBeforeStim','meanDuringStim','meanAfterStim',...
+saveFileName = [stimFilePathECOG 'v7_' patientID '_TimeAveragedSpectraPower_' currentStim '.mat'];
+save(saveFileName,'power_stim', 'meanBeforeStim','meanDuringStim','meanAfterStim',...
     'freqs','finalVerifiedRegions','finalVerifiedChanNames','currentStim','regionNames',...
-    'stimStartSample','stimEndSample','dsFs','Fs','numVerifiedChans','-v7.3')
+    'stimStartSample','stimEndSample','dsFs','Fs','numVerifiedChans','-v7')
