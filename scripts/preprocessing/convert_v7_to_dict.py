@@ -2,17 +2,29 @@ import numpy as np
 from scipy.io import loadmat
 import os, glob
 
-file_names = glob.glob("OFC_data/v7*.mat")
+spectra = True
+file_names = glob.glob("OFC_data/original/v7*Spectra*.mat")
 print(file_names, "hi")
 
 
 for i in range(len(file_names)):
     fn = file_names[i]
+    # if os.path.exists(f"OFC_data/{os.path.basename(fn).split('.')[0]}.pkl"):
+    #     continue
     print(fn)
     mat = loadmat(fn)
-    var_names = mat["mat_data"].dtype.names
-    dat = mat["mat_data"][0][0]
-    data_dict = {var_names[i]: dat[i] for i in range(len(var_names))}
+    if not spectra:
+        var_names = mat["mat_data"].dtype.names
+        dat = mat["mat_data"][0][0]
+        data_dict = {var_names[i]: dat[i] for i in range(len(var_names))}
+    if spectra:
+        var_names = mat.keys()
+        var_names = [
+            k
+            for k in var_names
+            if k not in ["__header__", "__version__", "__globals__"]
+        ]
+        data_dict = {k: mat[k] for k in var_names}
 
     # Squeeze extraneous dimensions
     for k in data_dict.keys():
@@ -37,6 +49,8 @@ for i in range(len(file_names)):
     except ValueError:
         print(f"selectVerifiedAnatomy is a list of  strings for {os.path.basename(fn)}")
         print(data_dict["selectVerifiedAnatomy"])
+    except KeyError:
+        print("No selectVerifiedAnatomy key")
 
     print(os.path.basename(fn).split(".")[0])
 
