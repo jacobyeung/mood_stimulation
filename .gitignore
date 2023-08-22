@@ -3,6 +3,7 @@ OFC_data/
 *zip
 
 *.mat
+*.xlsx
 
 # no images
 *.png
